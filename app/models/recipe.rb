@@ -1,9 +1,7 @@
 class Recipe < ApplicationRecord
+  validates :name, presence: true
+  validates :preparation_time, presence: true
+  validates :cooking_time, presence: true
   belongs_to :user
-
-  validates :preparationTime, presence: true
-  validates :cookTime, presence: true
-  validates :description, presence: true, length: { minimum: 250 }
-  validates :public, inclusion: { in: [true, false] }
-  validates :user, presence: true
+  has_many :recipefood
 end

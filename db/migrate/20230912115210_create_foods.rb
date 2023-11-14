@@ -9,6 +9,5 @@ class CreateFoods < ActiveRecord::Migration[7.0]
       t.timestamps
     end
     add_index :foods, :name
-    # add_index :foods, :user_id
   end
 end
