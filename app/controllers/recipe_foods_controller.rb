@@ -1,51 +1,67 @@
 class RecipeFoodsController < ApplicationController
-  before_action :set_recipe
-  before_action :set_recipe_food, only: %i[edit update destroy]
+  load_and_authorize_resource
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, notice: 'Access denied'
+  end
 
-  # New action to add a new food item to the recipe
   def new
+    @recipe = Recipe.find(params[:recipe_id])
+    @foods = Food.where.not(id: RecipeFood.where(recipe_id: @recipe.id).pluck(:food_id))
+
     @recipe_food = RecipeFood.new
   end
 
-  # Create action to save the new food item
+  def edit
+    @recipe_food = RecipeFood.find(params[:id])
+    @recipe = Recipe.find(params[:recipe_id])
+  end
+
   def create
     @recipe_food = RecipeFood.new(recipe_food_params)
+
     if @recipe_food.save
-      redirect_to recipe_path(@recipe), notice: 'Food item was successfully added to the recipe.'
+      flash[:notice] = 'Ingredient created!'
+      # Update the associated food's quantity.
+      @recipe_food.food.update_quantity
     else
-      render :new
+      flash[:alert] = @recipe_food.errors.full_messages.join(', ')
     end
+
+    redirect_to request.referrer
   end
 
-  # Edit action to modify the quantity and value of a food item
-  def edit; end
-
-  # Update action to save the modified quantity and value
-  def update
-    if @recipe_food.update(recipe_food_params)
-      redirect_to recipe_path(@recipe), notice: 'Food item was successfully updated.'
-    else
-      render :edit
-    end
-  end
-
-  # Destroy action to remove a food item from the recipe
   def destroy
-    @recipe_food.destroy
-    redirect_to recipe_path(@recipe), notice: 'Food item was successfully removed from the recipe.'
+    @recipe_food = RecipeFood.find(params[:id])
+
+    flash[:notice] = if @recipe_food.destroy
+                       'Ingredient Removed!'
+                     else
+                       @recipe_food.errors.full_messages.join(', ')
+                     end
+    @recipe_food.food.update_quantity
+    redirect_to request.referrer
+  end
+
+  def update
+    @recipe_food = RecipeFood.find(params[:id])
+
+    if @recipe_food.update(quantity_param)
+      flash[:notice] = 'Ingredient updated!'
+      @recipe_food.food.update_quantity
+      redirect_to recipe_path(params[:recipe_id])
+    else
+      flash[:notice] = @recipe_food.errors.full_messages.join(', ')
+      redirect_to request.referrer
+    end
   end
 
   private
 
-  def set_recipe
-    @recipe = Recipe.find(params[:recipe_id])
-  end
-
-  def set_recipe_food
-    @recipe_food = RecipeFood.find(params[:id])
-  end
-
   def recipe_food_params
-    params.require(:recipe_food).permit(:food_id, :quantity)
+    params.require(:recipe_food).permit(:food_id, :recipe_id, :quantity)
+  end
+
+  def quantity_param
+    params.require(:recipe_food).permit(:quantity)
   end
 end

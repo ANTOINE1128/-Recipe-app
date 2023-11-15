@@ -1,15 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  preparationTime: MyString
-  cookTime: MyString
+  name: MyString
+  preparation_time: 1
+  cooking_time: 1
   description: MyText
   public: false
   user: one
 
 two:
-  preparationTime: MyString
-  cookTime: MyString
+  name: MyString
+  preparation_time: 1
+  cooking_time: 1
   description: MyText
   public: false
   user: two
