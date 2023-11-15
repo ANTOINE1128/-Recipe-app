@@ -1,4 +1,4 @@
-#spec\features\recipe_index_spec.rb
+# spec\features\recipe_index_spec.rb
 
 require 'rails_helper'
 
