@@ -4,7 +4,11 @@ class RecipesController < ApplicationController
   before_action :set_recipe, only: %i[show edit update destroy]
 
   def index
-    @recipes = Recipe.all
+    if current_user
+      @recipes = current_user.recipes.includes(:recipe_foods).order(created_at: :desc)
+    else
+      redirect_to new_user_session_path, alert: 'Please log in to view your foods.'
+    end
   end
 
   def new
@@ -12,14 +16,13 @@ class RecipesController < ApplicationController
   end
 
   def create
-    @recipe = Recipe.new(recipe_params)
+    @recipe = current_user.recipes.new(recipe_params)
+
     if @recipe.save
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(@recipe) }
-        format.html { redirect_to @recipe, notice: 'Recipe was successfully created.' }
-      end
+      redirect_to recipes_path, Notice: 'Recipes added successfully'
     else
-      render :new
+      flash[:notice] = @recipe.errors.full_messages.join(', ')
+      redirect_to request.referrer
     end
   end
 
@@ -47,6 +50,6 @@ class RecipesController < ApplicationController
   end
 
   def recipe_params
-    params.require(:recipe).permit(:name, :preparation_time, :cooking_time, :description, :public, :user_id)
+    params.require(:recipe).permit(:name, :preparation_time, :cooking_time, :description, :public)
   end
 end
