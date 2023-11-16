@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.feature 'RecipeFoods', type: :feature do
   let(:user) { User.create(name: 'Binod', email: 'binod@example.com', password: 'password') }
 
@@ -51,3 +52,4 @@ RSpec.feature 'RecipeFoods', type: :feature do
     expect(page).not_to have_selector('tr', text: 'Apple')
   end
 end
+# rubocop:enable Metrics/BlockLength
