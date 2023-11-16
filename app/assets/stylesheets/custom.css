@@ -89,8 +89,8 @@ nav {
 
 .btn-add-food {
   cursor: pointer;
-  position: absolute;
-  left: 70%;
+  position: fixed;
+  left: 50%;
   top: 16%;
   text-align: center;
 }
@@ -142,13 +142,17 @@ nav {
 table {
   border-collapse: collapse;
   width: 90%;
-  text-align: left;
+  text-align: center;
   border: 1.5px solid #d3d3d3;
-  border-radius: 8px;
+  margin: auto;
+}
+
+th,
+td {
+  padding: 8px; /* Adjust padding as needed */
 }
 
 th {
-  padding: 4px;
   background-color: mediumspringgreen;
   border-left: 1.5px solid #d3d3d3;
 }
@@ -167,4 +171,8 @@ table td + td {
 
 .form-check {
   margin-left: 70%;
+}
+
+.text-center {
+  text-align: center;
 }

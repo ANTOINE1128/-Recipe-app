@@ -1,6 +1,6 @@
-<div class="users-container">
+<div class="users-container text-center">
 <div class="food-recipe-container">
-<section style="text-align:center;">
+<section>
 <h2>Recipe Details </h2>
 <h4 class="recipe-name"><%=@recipe.name%></h4>
 </section>
@@ -34,7 +34,7 @@
         <td><%= ingredient.quantity %> <%= ingredient.food.measurement_unit %></td>
         <td>$ <%= (ingredient.food.price * ingredient.quantity) %></td>
         <td>
-      <div style="display:flex; gap:25%">
+      <div style="display:flex; justify-self: center; ">
         <%= link_to "Modify", edit_recipe_recipe_food_path(@recipe, ingredient), class:"btn btn-warning btn-sm" %>
         <%= button_to  "Remove", recipe_recipe_food_path(@recipe,ingredient), method: :delete, class: "btn btn-danger btn-sm" %>
         </div>
