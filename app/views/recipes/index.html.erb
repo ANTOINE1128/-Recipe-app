@@ -6,10 +6,12 @@
   <div class="col-md-4">
 
        
-          <%= link_to recipe_path(recipe) do %>
+         <%= link_to recipe_path(recipe) do %>
             <p><%= recipe.name %></p>
           <% end %>
-<%= button_to "Remove", recipe_recipe_food_path(@recipe, ingredient), method: :delete, class: "btn btn-danger btn-sm btn-center-flex" %>
+          <%= button_to  "Remove", recipe_path(recipe), method: :delete,class:"btn btn-danger btn-sm btn-center-flex"%>
+       
+        </div>
        
         </div>
         <div class="col-md-6">
